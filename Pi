@@ -1,0 +1,21 @@
+#!/bin/env python3 
+
+import sys, serial, time
+
+nanoRelayUSB = '/dev/ttyUSB0'
+baudrate = 9600 
+codec = 'utf-8'
+lastState = 0b00000000
+
+if __name__ == '__main__':
+    try:
+        nanoRelay = serial.Serial(nanoRelayUSB, baudrate, timeout=1)
+        nanoRelay.flush()
+        while True:
+            if nanoRelay.in_waiting > 0:
+                state = nanoRelay.readline().decode(codec).rstrip()
+                print(state)
+
+    except KeyboardInterrupt:
+        print('Interrupted')
+        sys.exit(0)
