@@ -1,6 +1,7 @@
 #!/bin/env python3 
 
 import sys, serial, time
+from relay import a
 
 nanoRelayUSB = '/dev/ttyUSB0'
 baudrate = 9600 
@@ -9,6 +10,7 @@ lastState = 0b00000000
 
 if __name__ == '__main__':
     try:
+        a()
         nanoRelay = serial.Serial(nanoRelayUSB, baudrate, timeout=1)
         nanoRelay.flush()
         while True:
