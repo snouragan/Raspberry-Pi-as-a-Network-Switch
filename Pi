@@ -1,23 +1,39 @@
 #!/bin/env python3 
 
 import sys, serial, time
-from relay import a
+from relay import Relay
 
 nanoRelayUSB = '/dev/ttyUSB0'
 baudrate = 9600 
 codec = 'utf-8'
-lastState = 0b00000000
+lastState = 0b11111111
+currentState = 0b11111111
+numberOfRelays = 8
 
 if __name__ == '__main__':
     try:
-        a()
+    # initializing the nano that controls the relays ------------
         nanoRelay = serial.Serial(nanoRelayUSB, baudrate, timeout=1)
         nanoRelay.flush()
+
+    # initializing the relay module ----------------------------
+        relays = []
+        for _ in range(numberOfRelays):
+            relays.append(Relay(_))
+
+    # loop ------------------------------------------------------
         while True:
             if nanoRelay.in_waiting > 0:
                 state = nanoRelay.readline().decode(codec).rstrip()
-                print(state)
-
+                currentState = int(state)
+            if currentState != lastState:
+                print(currentState)
+                Relay.state = currentState
+                for relay in relays:
+                    if relay.isOn():
+                        print('Relay number ', relay.getNumber(), 'is on')
+                lastState = currentState
     except KeyboardInterrupt:
         print('Interrupted')
         sys.exit(0)
+
