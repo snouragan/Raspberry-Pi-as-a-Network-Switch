@@ -1,6 +1,6 @@
 #!/bin/env python3 
 
-import sys, serial, time
+import sys, serial
 from relay import Relay
 
 nanoRelayUSB = '/dev/ttyUSB0'
