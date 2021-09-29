@@ -8,13 +8,13 @@ from curses import wrapper, textpad
 
 class Relay:
     state = 0b11111111
-    numberOfRelays = 0
+    numberOfRelays = 8 
     stdscr = curses.initscr()
     SCREEN_WIDTH = curses.COLS
     SCREEN_HEIGHT = curses.LINES
     WIDTH = 8
     HEIGHT = 8
-    SPACEX = 0
+    SPACE = 0
     STARTY = 1
     def __init__(self, number, name="Relay"):
         self.name = name
@@ -30,12 +30,11 @@ class Relay:
         Relay.stdscr.clear()
         Relay.stdscr.addstr(0, 0, str(Relay.SCREEN_WIDTH))
         Relay.stdscr.addstr(1, 0, str(Relay.SCREEN_HEIGHT))
-    def setSpace(self):
-        Relay.SPACE = (Relay.SCREEN_WIDTH - Relay.WIDTH) // (Relay.numberOfRelays+1)
-        print(Relay.SPACE)
+    def setSpace():
+        Relay.SPACE = (Relay.SCREEN_WIDTH - (Relay.WIDTH*Relay.numberOfRelays)) // (Relay.numberOfRelays+1)
     def drawRelay(self):
-        Relay.setSpace(self)
-        uly = Relay.SPACE
+        Relay.setSpace()
+        uly = Relay.STARTY
         ulx = Relay.SPACE*(self.number+1) + self.number*Relay.WIDTH 
         lry = Relay.STARTY + Relay.HEIGHT
         lrx = ulx + Relay.WIDTH
@@ -49,12 +48,14 @@ if __name__ == '__main__':
         relay = []
         for _ in range(numberOfRelays):
             relay.append(Relay(_))
-        Relay.numberOfRelays = numberOfRelays
+#        for _ in range(1, numberOfRelays+1):
+#            Relay.numberOfRelays = _
+#            print(Relay.numberOfRelays)
+#            Relay.setSpace()
         while True:
-           #for _ in range(numberOfRelays):
-           #    relay[_].drawRelay()
-           pass
-
+            for _ in range(numberOfRelays):
+                relay[_].drawRelay()
+            pass
     except KeyboardInterrupt:
         curses.nocbreak()
         Relay.stdscr.keypad(False)
