@@ -12,16 +12,13 @@ numberOfRelays = 8
 
 if __name__ == '__main__':
     try:
-    # initializing the nano that controls the relays ------------
         nanoRelay = serial.Serial(nanoRelayUSB, baudrate, timeout=1)
         nanoRelay.flush()
 
-    # initializing the relay module ----------------------------
         relays = []
         for _ in range(numberOfRelays):
             relays.append(Relay(_))
 
-    # loop ------------------------------------------------------
         while True:
             if nanoRelay.in_waiting > 0:
                 state = nanoRelay.readline().decode(codec).rstrip()
